@@ -480,7 +480,7 @@ function createFallbackPlan(rawInput: string): LpPlan {
   const sections: LpSectionPlan[] = [
     {
       id: "hero",
-      title: "ヒーローセクション",
+      title: "① キャッチコピー",
       goal: "ファーストビューで価値とCTAを明確に伝える",
       visualStyle:
         "Floating device mockups, strong hero typography, gradient sky, subtle grid, top navigation",
@@ -490,7 +490,7 @@ function createFallbackPlan(rawInput: string): LpPlan {
     },
     {
       id: "problem",
-      title: "課題提起",
+      title: "② 共感セクション（問題提起）",
       goal: "ターゲットが抱える課題・痛みを整理し共感を得る",
       visualStyle:
         "Split cards highlighting pain points, muted background, highlighted warning tags",
@@ -498,32 +498,78 @@ function createFallbackPlan(rawInput: string): LpPlan {
       copy: detail || `${headline} が解決する課題`,
     },
     {
+      id: "before-after",
+      title: "③ Before / After",
+      goal: "導入前後の変化を対比させて効果を可視化する",
+      visualStyle:
+        "Split screen comparison, left side desaturated/chaotic, right side bright/organized, arrow transition",
+      prompt: `${basePrompt} | BEFORE AFTER comparison layout | left side gray/messy, right side clean/bright, large arrow in center | ${japaneseTextInstruction}`,
+      copy: "劇的な変化を実現",
+    },
+    {
       id: "solution",
-      title: "ソリューション & 価値訴求",
-      goal: "サービスの仕組みとベネフィットを段階的に説明する",
+      title: "⑤ サービス概要",
+      goal: "サービスで提供する価値や学習内容を網羅的に伝える",
       visualStyle:
-        "Step-by-step flow with arrows, glowing highlight behind main panel, clean white cards",
-      prompt: `${basePrompt} | SOLUTION section for ${headline} | illustrate 3-step workflow with arrows, include UI overlays and benefit callouts | ${japaneseTextInstruction}`,
-      copy: "3ステップで成果を実現",
+        "Bento grid layout, multiple feature cards, colorful icons, rich content density",
+      prompt: `${basePrompt} | SERVICE OVERVIEW bento grid | feature cards with icons, organized layout, modern glassmorphism | ${japaneseTextInstruction}`,
+      copy: "充実のカリキュラムとサポート",
     },
     {
-      id: "proof",
-      title: "証拠 / 社会的証明",
-      goal: "導入実績や声を示し信頼を強化する",
+      id: "price",
+      title: "⑥ 価格プラン",
+      goal: "料金体系を明確にし、納得感を醸成する",
       visualStyle:
-        "Testimonial cards, avatar chips, rating stars, press logos, soft shadows",
-      prompt: `${basePrompt} | SOCIAL PROOF section for ${headline} | grid of testimonials, avatars, 5-star badges, featured logos | ${japaneseTextInstruction}`,
-      copy: "導入企業・ユーザーの声",
+        "Pricing table card, highlighted price tag, checkmark list, trust badges",
+      prompt: `${basePrompt} | PRICING table layout | central card with price, list of features with checkmarks, trust badges at bottom | ${japaneseTextInstruction}`,
+      copy: "特別価格で提供",
+      cta: "プランを選択",
     },
     {
-      id: "cta",
-      title: "クローズ / CTA",
+      id: "flow",
+      title: "⑦ 利用の流れ",
+      goal: "開始までのステップを可視化し、不安を取り除く",
+      visualStyle:
+        "Vertical timeline or numbered steps, connecting lines, progress indicators",
+      prompt: `${basePrompt} | FLOW process steps | numbered list 1-2-3-4, connecting lines, simple icons for each step | ${japaneseTextInstruction}`,
+      copy: "簡単4ステップで開始",
+    },
+    {
+      id: "reason",
+      title: "⑩ 選ばれる理由",
+      goal: "競合他社との違いや独自の強みをアピールする",
+      visualStyle:
+        "List of benefits with large icons or checkmarks, bold headings, accent colors",
+      prompt: `${basePrompt} | WHY US section | list of strong points, large checkmarks, bold typography, accent highlights | ${japaneseTextInstruction}`,
+      copy: "選ばれる6つの理由",
+    },
+    {
+      id: "faq",
+      title: "⑪ よくある質問（FAQ）",
+      goal: "購入前の疑問や不安を解消する",
+      visualStyle:
+        "Accordion style list, clean question text, soft background bubbles",
+      prompt: `${basePrompt} | FAQ list layout | Q&A speech bubbles or accordion list, clean text layout, friendly vibe | ${japaneseTextInstruction}`,
+      copy: "よくあるご質問",
+    },
+    {
+      id: "message",
+      title: "⑫ 代表メッセージ",
+      goal: "開発者の想いを伝え、信頼と熱量を届ける",
+      visualStyle:
+        "Portrait photo on side, quote text block, signature, emotional atmosphere",
+      prompt: `${basePrompt} | MESSAGE section with portrait | professional portrait, quote marks, emotional typography layout | ${japaneseTextInstruction}`,
+      copy: "開発への想い",
+    },
+    {
+      id: "cta-closing",
+      title: "⑬ クロージング・CTA",
       goal: "最後の後押しとコンバージョン行動を促す",
       visualStyle:
         "Bold centered CTA card, contrasting gradient background, floating sparkles",
-      prompt: `${basePrompt} | CTA section for ${headline} | centered big CTA card, countdown badge, supportive text, background gradient | ${japaneseTextInstruction}`,
-      copy: "今すぐ無料で試す",
-      cta: "無料で試す",
+      prompt: `${basePrompt} | CLOSING CTA section | centered big CTA card, countdown badge, supportive text, background gradient | ${japaneseTextInstruction}`,
+      copy: "今すぐ申し込む",
+      cta: "お申し込みはこちら",
     },
   ];
 
