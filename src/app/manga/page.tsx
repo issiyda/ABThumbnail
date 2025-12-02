@@ -222,7 +222,7 @@ export default function MangaBuilderPage() {
   const handleGenerateAll = async () => {
     const storyPlan = plan ?? (await handleGeneratePlan());
     if (!storyPlan) return;
-    const preparedPanels =
+    const preparedPanels: MangaPanelResult[] =
       panels.length > 0
         ? panels.map((panel) => ({
             ...panel,
