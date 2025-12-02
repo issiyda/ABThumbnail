@@ -724,8 +724,15 @@ function normalizeMangaPanel(
   index: number
 ): MangaPanelPlan {
   const templateIds = new Set(templates.map((tpl) => tpl.id));
-  const fallbackTemplateId = templates[index % templates.length]?.id || "hero-single";
-  const phaseOptions = ["intro", "rise", "fall", "climax", "resolution"] as const;
+  const fallbackTemplateId =
+    templates[index % templates.length]?.id || "hero-single";
+  const phaseOptions = [
+    "intro",
+    "rise",
+    "fall",
+    "climax",
+    "resolution",
+  ] as const;
   const phase =
     phaseOptions.find((item) => item === candidate?.narrativePhase) ||
     phaseOptions[index] ||
@@ -837,7 +844,11 @@ function createFallbackMangaStory(
     dialogue: phase.dialogue,
     narration: phase.desc,
     tone: phase.tone,
-    visualKeywords: ["cinematic shading", "emotive close up", "consistent character"],
+    visualKeywords: [
+      "cinematic shading",
+      "emotive close up",
+      "consistent character",
+    ],
   }));
 
   return {
@@ -858,7 +869,9 @@ function normalizeMangaStoryPlan(
 ): MangaStoryPlan {
   if (!candidate || typeof candidate !== "object") return fallback;
 
-  const panelsSource: any[] = Array.isArray(candidate.panels) ? candidate.panels : [];
+  const panelsSource: any[] = Array.isArray(candidate.panels)
+    ? candidate.panels
+    : [];
   const panels =
     panelsSource.length > 0
       ? panelsSource.map((panel, index) =>
@@ -944,7 +957,8 @@ Remember: JSON only.`,
         .filter(Boolean)
         .join("\n") || "";
     const jsonString =
-      extractJsonBlock(text) || (text.trim().startsWith("{") ? text.trim() : null);
+      extractJsonBlock(text) ||
+      (text.trim().startsWith("{") ? text.trim() : null);
     if (!jsonString) return fallback;
     const parsed = JSON.parse(jsonString);
     return normalizeMangaStoryPlan(parsed, fallback, templates);
@@ -961,7 +975,8 @@ function normalizeSlidePlanCandidate(
 ): SlidePlanItem {
   const templateIds = new Set(templates.map((tpl) => tpl.id));
   const fallbackTemplateId = templates[0]?.id || "intro";
-  const templateIdSource = candidate?.templateId || candidate?.template || candidate?.layout;
+  const templateIdSource =
+    candidate?.templateId || candidate?.template || candidate?.layout;
   const templateId = templateIds.has(templateIdSource)
     ? templateIdSource
     : fallbackTemplateId;
@@ -1013,7 +1028,9 @@ function normalizeSlidePlanCandidate(
         : undefined,
     keywords: Array.isArray(candidate?.keywords)
       ? candidate.keywords
-          .map((kw: unknown) => (typeof kw === "string" ? kw.trim() : String(kw)))
+          .map((kw: unknown) =>
+            typeof kw === "string" ? kw.trim() : String(kw)
+          )
           .filter(Boolean)
           .slice(0, 6)
       : undefined,
@@ -1065,7 +1082,11 @@ export async function generateSlidePlan(
   apiKey?: string
 ): Promise<SlidePlanItem[]> {
   const safeOutline = outline?.trim() || "";
-  const fallback = createFallbackSlidePlan(safeOutline, templates, targetSlides);
+  const fallback = createFallbackSlidePlan(
+    safeOutline,
+    templates,
+    targetSlides
+  );
   const key = apiKey?.trim();
   if (!key) return fallback;
 
@@ -1103,13 +1124,15 @@ SOURCE TEXT (JP allowed, keep concise):
     const text =
       data?.candidates
         ?.flatMap(
-          (candidate: any) => candidate?.content?.parts?.map((part: any) => part.text) || []
+          (candidate: any) =>
+            candidate?.content?.parts?.map((part: any) => part.text) || []
         )
         .filter(Boolean)
         .join("\n") || "";
 
     const jsonString =
-      extractJsonBlock(text) || (text.trim().startsWith("[") ? text.trim() : null);
+      extractJsonBlock(text) ||
+      (text.trim().startsWith("[") ? text.trim() : null);
     if (!jsonString) return fallback;
 
     let parsed: any[];

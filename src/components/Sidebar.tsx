@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -10,6 +11,8 @@ import {
   PanelsTopLeft,
   PanelTop,
   Sparkles,
+  Menu,
+  X,
 } from "lucide-react";
 import clsx from "clsx";
 
@@ -24,9 +27,18 @@ const nav: Array<{ href: string; label: string; icon: typeof Sparkles }> = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  return (
-    <aside className="sticky top-0 hidden h-screen w-64 flex-shrink-0 flex-col border-r border-border bg-card/80 px-5 py-8 shadow-sm lg:flex">
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  const NavContent = () => (
+    <>
       <div className="mb-8 flex items-center gap-3">
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-white shadow-soft">
           <PanelsTopLeft />
@@ -47,6 +59,7 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href as any}
+              onClick={closeMobileMenu}
               className={clsx(
                 "flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition-all",
                 active
@@ -65,6 +78,42 @@ export default function Sidebar() {
         <p className="font-semibold text-text">ローカル完結</p>
         <p>APIキーや画像はブラウザ内にのみ保存され、サーバーに送信されません。</p>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* モバイル用ハンバーガーボタン */}
+      <button
+        onClick={toggleMobileMenu}
+        className="fixed left-4 top-4 z-50 flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white shadow-lg lg:hidden"
+        aria-label="メニューを開く"
+      >
+        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+
+      {/* オーバーレイ */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          onClick={closeMobileMenu}
+        />
+      )}
+
+      {/* PC用サイドバー */}
+      <aside className="sticky top-0 hidden h-screen w-64 flex-shrink-0 flex-col border-r border-border bg-card/80 px-5 py-8 shadow-sm lg:flex">
+        <NavContent />
+      </aside>
+
+      {/* モバイル用サイドバー */}
+      <aside
+        className={clsx(
+          "fixed left-0 top-0 z-40 h-screen w-64 flex-shrink-0 flex-col border-r border-border bg-card/95 px-5 py-8 shadow-lg transition-transform duration-300 lg:hidden",
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        <NavContent />
+      </aside>
+    </>
   );
 }
