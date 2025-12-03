@@ -47,7 +47,6 @@ interface SectionResult extends LpSectionPlan {
 }
 
 const VERTICAL_RATIO = "9:16";
-const SECTION_GAP = 24;
 
 const uid = () =>
   typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -538,20 +537,18 @@ export default function LandingPageBuilder() {
         ...images.map((image) => image.naturalWidth || 1080),
         1080
       );
-      const totalHeight =
-        images.reduce((sum, image) => {
-          const width =
-            image.naturalWidth && image.naturalWidth > 0
-              ? image.naturalWidth
-              : targetWidth;
-          const height =
-            image.naturalHeight && image.naturalHeight > 0
-              ? image.naturalHeight
-              : targetWidth * (VERTICAL_RATIO === "9:16" ? 16 / 9 : 1);
-          const ratio = targetWidth / width;
-          return sum + Math.round(height * ratio);
-        }, 0) +
-        SECTION_GAP * (images.length - 1);
+      const totalHeight = images.reduce((sum, image) => {
+        const width =
+          image.naturalWidth && image.naturalWidth > 0
+            ? image.naturalWidth
+            : targetWidth;
+        const height =
+          image.naturalHeight && image.naturalHeight > 0
+            ? image.naturalHeight
+            : targetWidth * (VERTICAL_RATIO === "9:16" ? 16 / 9 : 1);
+        const ratio = targetWidth / width;
+        return sum + Math.round(height * ratio);
+      }, 0);
 
       const canvas = document.createElement("canvas");
       canvas.width = targetWidth;
@@ -574,7 +571,7 @@ export default function LandingPageBuilder() {
         const ratio = targetWidth / width;
         const drawHeight = Math.round(height * ratio);
         ctx.drawImage(image, 0, cursorY, targetWidth, drawHeight);
-        cursorY += drawHeight + SECTION_GAP;
+        cursorY += drawHeight;
       });
 
       const merged = canvas.toDataURL("image/png", 1);
@@ -862,7 +859,7 @@ export default function LandingPageBuilder() {
                 <h2 className="text-xl font-bold text-text">LP本文</h2>
               </div>
               <span className="text-xs text-muted">
-                4〜6セクション構成を自動抽出
+                複数セクションを自動抽出
               </span>
             </div>
             <Label htmlFor="lp-brief">コピー / 概要を貼り付け</Label>
